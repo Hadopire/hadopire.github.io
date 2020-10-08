@@ -96,6 +96,7 @@ function main() {
     scene.shadowMap = {
         frameBuffer: gl.createFramebuffer(),
         texture: gl.createTexture(),
+        depthBuffer: gl.createRenderbuffer(),
     }
 
     gl.bindTexture(gl.TEXTURE_2D, scene.shadowMap.texture);
@@ -106,6 +107,9 @@ function main() {
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
     gl.bindFramebuffer(gl.FRAMEBUFFER, scene.shadowMap.frameBuffer);
     gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, scene.shadowMap.texture, 0);
+    gl.bindRenderbuffer(gl.RENDERBUFFER, scene.shadowMap.depthBuffer);
+    gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, shadowMapWidth, 1);
+    gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, scene.shadowMap.depthBuffer);
 
     const shadowMapProgram = glutils.initShaderProgram(
         gl,
@@ -134,15 +138,19 @@ function main() {
         0.0, 1.0,
         0.0, 1.0,
         0.0, 1.0,
+        0.0, 1.0,
+        0.0, 1.0,
     ];
 
     let segments = [
-        -0.25, 0.0, 0.0, 0.0, -0.25, 0.0, 0.0, 0.0,
-        0.0, 0.0, -0.25, 0.0, 0.0, 0.0, -0.25, 0.0,
-        -0.25, -0.25, 0.25, -0.25, -0.25, -0.25, 0.25, -0.25,
-        0.25, -0.25, -0.25, -0.25, 0.25, -0.25, -0.25, -0.25,
-        -0.25, 0.0, -0.25, -0.25, -0.25, 0.0, -0.25, -0.25,
-        -0.25, -0.25, -0.25, 0.0, -0.25, -0.25, -0.25, 0.0,
+        -0.25,  0.0,   0.25,  0.0,       -0.25,  0.0,   0.25,  0.0,
+         0.0,   0.0,  -0.25,  0.0,        0.0,   0.0,  -0.25,  0.0,
+        -0.25, -0.25,  0.25, -0.25,      -0.25, -0.25,  0.25, -0.25,
+         0.25, -0.25, -0.25, -0.25,       0.25, -0.25, -0.25, -0.25,
+        -0.25,  0.0,  -0.25, -0.25,      -0.25,  0.0,  -0.25, -0.25,
+        -0.25, -0.25, -0.25,  0.0,       -0.25, -0.25, -0.25,  0.0,
+         0.25,  0.0,   0.25, -0.25,       0.25,  0.0,   0.25, -0.25,
+         0.25, -0.25,  0.25,  0.0,        0.25, -0.25,  0.25,  0.0,         
     ];
 
     line.positions = gl.createBuffer();
@@ -202,7 +210,7 @@ function render(now) {
     
     gl.useProgram(scene.line.material.program);
     gl.uniform4fv(scene.line.material.uniformLocations.lightPosition, scene.light);
-    gl.drawArrays(gl.LINES, 0, 12);
+    gl.drawArrays(gl.LINES, 0, 16);
 
     gl.disableVertexAttribArray(scene.line.material.attribLocations.position);
 
