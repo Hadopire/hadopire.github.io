@@ -168,9 +168,9 @@ function main() {
 
 function tick(delta) {
     let move = glmatrix.vec3.create();
-    if (keyboard.isKeyDown("w", "W"))
+    if (keyboard.isKeyDown("w", "W", "z", "Z"))
         move[1] += 1;
-    if (keyboard.isKeyDown("a", "A"))
+    if (keyboard.isKeyDown("a", "A", "q", "Q"))
         move[0] -= 1;
     if (keyboard.isKeyDown("s", "S"))
         move[1] -= 1;
