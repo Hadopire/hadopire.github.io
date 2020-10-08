@@ -26,9 +26,12 @@ void main()
         color += diffuse * vertexColor;
     }
 
-    if (fragPosition.y < -0.5)
+    if (dist < 0.05 && dist > 0.03)
     {
-        gl_FragColor = vec4(texture2D(uShadowMap, vec2(fragPosition.x, 0.0)).x, 0.0, 0.0, 1.0);
+        if (casterDist > 10.0) 
+            gl_FragColor = vec4(0.7, 0.3, 0.6, 1.0);
+        else
+            gl_FragColor = vec4(0.0, texture2D(uShadowMap, vec2(angularPosition, 0.0)).x * 2.0, 0.0, 1.0);
     }
     else
     {
