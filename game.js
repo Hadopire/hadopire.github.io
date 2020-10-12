@@ -87,7 +87,7 @@ function main() {
     };
 
     shaderProgram = glutils.initShaderProgram(gl, utils.loadFile("shaders/main_webgl2.vert"), utils.loadFile("shaders/unlit.frag"));
-    scene.materials.ambiant = {
+    scene.materials.unlit = {
         program: shaderProgram,
         uniformLocations: {
             modelMatrix:        gl.getUniformLocation(shaderProgram, 'uModelMatrix'),
@@ -125,9 +125,15 @@ function main() {
     const margin = 0.0005;
 
     rectangle(scene.materials.diffuse, 0.0, 0.0, 10.0, 10.0, [0.133, 0.639, 0.521, 1.0]);
-    scene.controlled.push(rectangle(scene.materials.ambiant, 0.0, 0.0, 0.25, 0.25, [0.133, 0.639, 0.521, 1.0]));
-    scene.controlled.push(obstacleRectangle(scene.materials.shadow, 0.0, 0.0, 0.25 - margin, 0.25 - margin));
 
+    for (let i = 0; i < 11; ++i) {
+        for (let j = 0; j < 11; ++j) {
+            const x = i / 10.0 * 2.0 - 1.0;
+            const y = j / 10.0 * 2.0 - 1.0;
+            obstacleRectangle(scene.materials.shadow, x, y, 1/20.0 - margin, 1/20.0 - margin);
+            rectangle(scene.materials.unlit, x, y, 1/20.0, 1/20.0, [0.0, 0.0, 0.0, 1.0]);
+        }
+    }
 
     requestAnimationFrame(render);
 }
@@ -324,7 +330,7 @@ function render(now) {
     gl.disable(gl.DEPTH_TEST);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
-    for (material of [scene.materials.diffuse, scene.materials.ambiant]) {
+    for (material of [scene.materials.diffuse, scene.materials.unlit]) {
         //material = scene.materials.diffuse;
         gl.useProgram(material.program);
         gl.bindTexture(gl.TEXTURE_2D, scene.shadowmap.texture);

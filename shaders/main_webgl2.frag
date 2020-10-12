@@ -21,7 +21,7 @@ void main()
     float angularPosition = atan(lightSpacePosition.y, lightSpacePosition.x) / (2.0 * pi) + 0.5;
     float casterDist = texture(uShadowmap, vec2(angularPosition, 0.0)).x;
 
-    vec4 color = vec4(0.5 * vertexColor.rgb, 1.0);
+    vec4 color = vec4(0.01 * vertexColor.rgb, 1.0);
     if (dist < casterDist)
     {
         const float l = 0.1;
@@ -30,15 +30,5 @@ void main()
         color += diffuse * vertexColor;
     }
 
-    if (dist < 0.05 && dist > 0.03)
-    {
-        if (casterDist > 10.0) 
-            fragColor = vec4(0.7, 0.3, 0.6, 1.0);
-        else
-            fragColor = vec4(0.0, texture(uShadowmap, vec2(angularPosition, 0.0)).x * 2.0, 0.0, 1.0);
-    }
-    else
-    {
-        fragColor = color;
-    }
+    fragColor = color;
 }
