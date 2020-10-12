@@ -15,6 +15,7 @@ let scene = {
         position: glmatrix.vec4.fromValues(0.0, 0.0, 0.0, 1.0),
         color: glmatrix.vec3.fromValues(1.0, 1.0, 1.0)
     },
+    controlled: [],
 };
 
 function main() {
@@ -85,6 +86,29 @@ function main() {
         objects: [],
     };
 
+    shaderProgram = glutils.initShaderProgram(gl, utils.loadFile("shaders/main_webgl2.vert"), utils.loadFile("shaders/unlit.frag"));
+    scene.materials.ambiant = {
+        program: shaderProgram,
+        uniformLocations: {
+            modelMatrix:        gl.getUniformLocation(shaderProgram, 'uModelMatrix'),
+            viewMatrix:         gl.getUniformLocation(shaderProgram, 'uViewMatrix'),
+            projectionMatrix:   gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
+        },
+        uniforms: {
+            viewMatrix:         glmatrix.mat4.create(),
+            projectionMatrix:   glmatrix.mat4.ortho(
+                                    glmatrix.mat4.create(),
+                                    -1.0,
+                                    1.0,
+                                    -1.0 / aspectRatio,
+                                    1.0 / aspectRatio,
+                                    -1.0,
+                                    1.0
+                                ),
+        },
+        objects: [],
+    };
+
     shaderProgram = glutils.initShaderProgram(gl, utils.loadFile("shaders/shadow_webgl2.vert"), utils.loadFile("shaders/shadow_webgl2.frag"));
     scene.materials.shadow = {
         program: shaderProgram,
@@ -98,8 +122,11 @@ function main() {
         objects: [],
     };
 
+    const margin = 0.0005;
+
     rectangle(scene.materials.diffuse, 0.0, 0.0, 10.0, 10.0, [0.133, 0.639, 0.521, 1.0]);
-    scene.controlled = obstacleRectangle(scene.materials.shadow, 0.0, 0.0, 0.25, 0.25);
+    scene.controlled.push(rectangle(scene.materials.ambiant, 0.0, 0.0, 0.25, 0.25, [0.133, 0.639, 0.521, 1.0]));
+    scene.controlled.push(obstacleRectangle(scene.materials.shadow, 0.0, 0.0, 0.25 - margin, 0.25 - margin));
 
 
     requestAnimationFrame(render);
@@ -248,22 +275,24 @@ function tick(delta) {
     mPos.y = -(((mPos.y / gl.canvas.height * 2.0) - 1.0) / aspectRatio);
     scene.light.position = glmatrix.vec4.fromValues(mPos.x, mPos.y, 0.0, 1.0);
 
-    let transform = scene.controlled.transform;
-    if (keyboard.isKeyDown("w", "W", "z", "Z"))
-        transform.position.y += 1 * delta;
-    if (keyboard.isKeyDown("a", "A", "q", "Q"))
-        transform.position.x -= 1 * delta;
-    if (keyboard.isKeyDown("s", "S"))
-        transform.position.y -= 1 * delta;
-    if (keyboard.isKeyDown("d", "D"))
-        transform.position.x += 1 * delta;
+    for (const controlled of scene.controlled) {
+        let transform = controlled.transform;
+        if (keyboard.isKeyDown("w", "W", "z", "Z"))
+            transform.position.y += 1 * delta;
+        if (keyboard.isKeyDown("a", "A", "q", "Q"))
+            transform.position.x -= 1 * delta;
+        if (keyboard.isKeyDown("s", "S"))
+            transform.position.y -= 1 * delta;
+        if (keyboard.isKeyDown("d", "D"))
+            transform.position.x += 1 * delta;
 
-    glmatrix.mat4.fromRotationTranslationScale(
-        scene.controlled.modelMatrix,
-        glmatrix.quat.create(),
-        glmatrix.vec3.fromValues(transform.position.x, transform.position.y, 0.0),
-        glmatrix.vec3.fromValues(transform.scale.x, transform.scale.y, 0.0)
-    );
+        glmatrix.mat4.fromRotationTranslationScale(
+            controlled.modelMatrix,
+            glmatrix.quat.create(),
+            glmatrix.vec3.fromValues(transform.position.x, transform.position.y, 0.0),
+            glmatrix.vec3.fromValues(transform.scale.x, transform.scale.y, 0.0)
+        );
+    }
 }
 
 let then = 0;
@@ -295,19 +324,21 @@ function render(now) {
     gl.disable(gl.DEPTH_TEST);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
-    material = scene.materials.diffuse;
-    gl.useProgram(material.program);
-    gl.bindTexture(gl.TEXTURE_2D, scene.shadowmap.texture);
-    gl.activeTexture(gl.TEXTURE0)
-    gl.uniform1i(material.uniformLocations.shadowmap, 0);
-    gl.uniformMatrix4fv(material.uniformLocations.viewMatrix, false, material.uniforms.viewMatrix);
-    gl.uniformMatrix4fv(material.uniformLocations.projectionMatrix, false, material.uniforms.projectionMatrix);
-    gl.uniform4fv(material.uniformLocations.lightPosition, scene.light.position);
-    gl.uniform3fv(material.uniformLocations.lightColor, scene.light.color);
-    for (const object of material.objects) {
-        gl.uniformMatrix4fv(material.uniformLocations.modelMatrix, false, object.modelMatrix);
-        gl.bindVertexArray(object.vao);
-        gl.drawArrays(gl.TRIANGLE_STRIP, 0, object.drawCount);
+    for (material of [scene.materials.diffuse, scene.materials.ambiant]) {
+        //material = scene.materials.diffuse;
+        gl.useProgram(material.program);
+        gl.bindTexture(gl.TEXTURE_2D, scene.shadowmap.texture);
+        gl.activeTexture(gl.TEXTURE0)
+        gl.uniform1i(material.uniformLocations.shadowmap, 0);
+        gl.uniformMatrix4fv(material.uniformLocations.viewMatrix, false, material.uniforms.viewMatrix);
+        gl.uniformMatrix4fv(material.uniformLocations.projectionMatrix, false, material.uniforms.projectionMatrix);
+        gl.uniform4fv(material.uniformLocations.lightPosition, scene.light.position);
+        gl.uniform3fv(material.uniformLocations.lightColor, scene.light.color);
+        for (const object of material.objects) {
+            gl.uniformMatrix4fv(material.uniformLocations.modelMatrix, false, object.modelMatrix);
+            gl.bindVertexArray(object.vao);
+            gl.drawArrays(gl.TRIANGLE_STRIP, 0, object.drawCount);
+        }
     }
 
     requestAnimationFrame(render);
