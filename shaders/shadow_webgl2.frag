@@ -1,12 +1,12 @@
-#extension GL_EXT_frag_depth : enable
+#version 300 es
 
 precision highp float;
 
-uniform vec4 uLightPosition;
+in vec2 vertexA;
+in vec2 vertexB;
+in float theta;
 
-varying vec2 vertexA;
-varying vec2 vertexB;
-varying float theta;
+out vec4 fragColor;
 
 void main()
 {
@@ -19,11 +19,11 @@ void main()
     float dist;
     if (abs(cross2) < 1e-3) {
        // The ray is collinear with the obstacle
-        dist = min(length(vertexA), length(vertexB));
+        dist = max(length(vertexA), length(vertexB));
     }
     else {
         dist = (diff.y * vertexA.x - diff.x * vertexA.y) / cross2;
     }
-    gl_FragDepthEXT = dist / 16.0;
-    gl_FragColor = vec4(dist, 0.0, 0.0, 1.0);
+    gl_FragDepth = dist / 16.0;
+    fragColor = vec4(dist, 0.0, 0.0, 1.0);
 }
