@@ -24,9 +24,9 @@ void main()
     vec4 color = vec4(0.01 * vertexColor.rgb, 1.0);
     if (dist < casterDist)
     {
-        const float l = 0.1;
-        float q = sqrt(l*l+dist*dist);
-        vec4 diffuse = vec4((l/q) * uLightColor, 1.0);
+        const float r = 0.05;
+        float attenuation = 1.0 / pow(dist/r + 1.0, 2.0);
+        vec4 diffuse = vec4(attenuation * uLightColor, 1.0);
         color += diffuse * vertexColor;
     }
 
