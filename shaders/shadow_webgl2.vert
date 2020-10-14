@@ -20,6 +20,13 @@ void main()
     float thetaA = atan(vertexA.y, vertexA.x);
     float thetaAB = atan(vertexA.x * vertexB.y - vertexA.y * vertexB.x, vertexA.x * vertexB.x + vertexA.y * vertexB.y) * aVertexPosition;
     theta = thetaA + thetaAB;
-    float ySnappedPixelPos = (2.0 * float(gl_InstanceID) + 1.0) / (2.0 * float(MAXLIGHTCOUNT));
-    gl_Position = vec4(theta / PI, ySnappedPixelPos * 2.0 - 1.0, 0.0, 1.0);
+    float ySnappedPixelPos = ((2.0 * float(gl_InstanceID) + 1.0) / (2.0 * float(MAXLIGHTCOUNT))) * 2.0 - 1.0;
+    // skip redrawing if we don't loop in the buffer
+    if (aVertexPosition > 0.0 && thetaAB < 0.0 && theta > -PI) {
+        theta = thetaA;
+        gl_Position = vec4(thetaA / PI, ySnappedPixelPos, 0.0, 1.0);
+    }
+    else {
+        gl_Position = vec4(theta / PI, ySnappedPixelPos, 0.0, 1.0);
+    }
 }

@@ -46,7 +46,7 @@ function main() {
         framebuffer: gl.createFramebuffer(),
         depthbuffer: gl.createRenderbuffer(),
         texture: gl.createTexture(),
-        width: 2048,
+        width: 1024,
         height: maxLightCount,
     };
 
