@@ -7,15 +7,17 @@ import * as glmatrix from './glmatrix/index.js'
 
 let gl;
 let aspectRatio;
+const maxLightCount = 64;
 
 let scene = {
     materials: {},
     shadowmap: {},
-    light: {
-        position: glmatrix.vec4.fromValues(0.0, 0.0, 0.0, 1.0),
-        color: glmatrix.vec3.fromValues(1.0, 1.0, 1.0)
+    lights: {
+        positions: Float32Array.from(Array(maxLightCount).fill([0.0, 0.0, 0.0, 1.0]).flat()),
+        colors: Float32Array.from(Array(maxLightCount).fill([1.0, 1.0, 1.0]).flat()),
     },
     controlled: [],
+    controlledLight: 0,
 };
 
 function main() {
@@ -36,13 +38,16 @@ function main() {
     }
 
     mouse.registerGlContext(gl);
+    mouse.registerMouseClickCallback(function() {
+        scene.controlledLight = (scene.controlledLight + 1) % maxLightCount;
+    });
     
     scene.shadowmap = {
         framebuffer: gl.createFramebuffer(),
         depthbuffer: gl.createRenderbuffer(),
         texture: gl.createTexture(),
         width: 2048,
-        height: 1,
+        height: maxLightCount,
     };
 
     gl.bindTexture(gl.TEXTURE_2D, scene.shadowmap.texture);
@@ -79,8 +84,8 @@ function main() {
                                     -1.0,
                                     1.0
                                 ),
-            lightPosition:      scene.light,
-            lightColor:         glmatrix.vec4.fromValues(1.0, 1.0, 1.0, 1.0),
+            lightPositions:      scene.lights.positions,
+            lightColors:         scene.lights.colors,
             shadowmap:          scene.shadowmap,
         },
         objects: [],
@@ -117,7 +122,7 @@ function main() {
             lightPosition:  gl.getUniformLocation(shaderProgram, 'uLightPosition'),
         },
         uniforms: {
-            lightPosition:  scene.light,
+            lightPositions:  scene.lights.positions,
         },
         objects: [],
     };
@@ -279,7 +284,7 @@ function tick(delta) {
     let mPos = mouse.getMousePosition();
     mPos.x = (mPos.x / gl.canvas.width * 2.0) - 1.0;
     mPos.y = -(((mPos.y / gl.canvas.height * 2.0) - 1.0) / aspectRatio);
-    scene.light.position = glmatrix.vec4.fromValues(mPos.x, mPos.y, 0.0, 1.0);
+    scene.lights.positions.set(glmatrix.vec4.fromValues(mPos.x, mPos.y, 0.0, 1.0), scene.controlledLight * 4);
 
     for (const controlled of scene.controlled) {
         let transform = controlled.transform;
@@ -316,11 +321,11 @@ function render(now) {
 
     let material = scene.materials.shadow;
     gl.useProgram(material.program);
-    gl.uniform4fv(material.uniformLocations.lightPosition, scene.light.position);
+    gl.uniform4fv(material.uniformLocations.lightPosition, scene.lights.positions);
     for (const object of material.objects) {
         gl.uniformMatrix4fv(material.uniformLocations.modelMatrix, false, object.modelMatrix);
         gl.bindVertexArray(object.vao);
-        gl.drawArrays(gl.LINES, 0, object.drawCount);
+        gl.drawArraysInstanced(gl.LINES, 0, object.drawCount, maxLightCount);
     }
 
 
@@ -331,15 +336,14 @@ function render(now) {
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     for (material of [scene.materials.diffuse, scene.materials.unlit]) {
-        //material = scene.materials.diffuse;
         gl.useProgram(material.program);
         gl.bindTexture(gl.TEXTURE_2D, scene.shadowmap.texture);
         gl.activeTexture(gl.TEXTURE0)
         gl.uniform1i(material.uniformLocations.shadowmap, 0);
         gl.uniformMatrix4fv(material.uniformLocations.viewMatrix, false, material.uniforms.viewMatrix);
         gl.uniformMatrix4fv(material.uniformLocations.projectionMatrix, false, material.uniforms.projectionMatrix);
-        gl.uniform4fv(material.uniformLocations.lightPosition, scene.light.position);
-        gl.uniform3fv(material.uniformLocations.lightColor, scene.light.color);
+        gl.uniform4fv(material.uniformLocations.lightPosition, scene.lights.positions);
+        gl.uniform3fv(material.uniformLocations.lightColor, scene.lights.colors);
         for (const object of material.objects) {
             gl.uniformMatrix4fv(material.uniformLocations.modelMatrix, false, object.modelMatrix);
             gl.bindVertexArray(object.vao);

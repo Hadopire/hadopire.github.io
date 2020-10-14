@@ -25,5 +25,5 @@ void main()
         dist = (diff.y * vertexA.x - diff.x * vertexA.y) / cross2;
     }
     gl_FragDepth = dist / 16.0;
-    fragColor = vec4(dist, 0.0, 0.0, 1.0);
+    fragColor = vec4(dist, 1.0, dist, 1.0);
 }
