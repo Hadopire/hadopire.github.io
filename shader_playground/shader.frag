@@ -4,6 +4,7 @@ precision highp float;
 uniform vec2 iResolution;
 uniform float iTime;
 uniform sampler2D iChannel0;
+uniform sampler2D fbmTexture;
 
 in vec2 fragCoord;
 out vec4 fragColor;
@@ -16,6 +17,24 @@ const float AMPLITUDE = 0.3;
 const float FREQUENCY = 3.0;
 
 const float COLOR_FREQUENCY = 300.0;
+
+
+const vec4 bitShR = vec4(1.0/16777216.0, 1.0/65536.0, 1.0/256.0, 1.0);
+float unpackFloat( in vec4 value )
+{
+    return dot( value, bitShR ) * 2.0 - 1.0;
+}
+
+
+const vec4 bitShL = vec4(16777216.0, 65536.0, 256.0, 1.0);
+vec4 packFloat( in float value )
+{
+    value = (value + 1.0) / 2.0;
+    vec4 res = fract( value*bitShL );
+	res.yzw -= res.xyz/256.0;
+	return res;
+}
+
 
 float rd(vec2 p)
 {
@@ -70,9 +89,9 @@ float fbm(vec2 p)
     return value;
 }
 
-float sdf(vec2 p)
+float sdf(vec2 p, vec2 nuv)
 {
-    float n = fbm(p*30.0) / 20.0;
+    float n = unpackFloat(texture(fbmTexture, nuv));
     float d = abs(circle(p, vec2(0.0,0.0), cos(iTime) + 1.0) + n);
     d = min(d, abs(box(vec2(rot(p, iTime)), vec2(cos(iTime - 2.0) + 1.0), vec2(0.0)) + n));
     return d;
@@ -81,11 +100,12 @@ float sdf(vec2 p)
 
 void main() {
     vec2 uv = (2.0 * fragCoord - iResolution.xy) / iResolution.y;
+    vec2 nuv = fragCoord / iResolution.xy;
     vec4 color = texture(iChannel0, fragCoord / iResolution.xy);
     //vec4 color = vec4(0.0);
 
 
-    float d = sdf(uv);
+    float d = sdf(uv, nuv);
     float thickness = 5.0 / iResolution.y;
     float r = (rd(floor(vec2(iTime) * 1000.0 / COLOR_FREQUENCY)) + 1.0) / 2.0;
     float g = (rd(floor(vec2(iTime + 100.0) * 1000.0 / COLOR_FREQUENCY)) + 1.0) / 2.0;

@@ -32,18 +32,38 @@ let gl = null;
 
 let mainShader = null;
 let passthroughShader = null;
+let fbmShader = null;
 
 let vao = null;
-let previousRenderTarget = null;
-let renderTarget = null;
+let pmainImage = null;
+let mainImage = null;
+let fbmTexture = null;
 
-function onResize() {
+function createFramebuffers() {
     if (gl == null) return;
+
+    if (pmainImage != null) {
+        gl.deleteFramebuffer(pmainImage.framebuffer);
+        gl.deleteFramebuffer(mainImage.framebuffer);
+        gl.deleteFramebuffer(fbmTexture.framebuffer);
+        gl.deleteTexture(pmainImage.texture);
+        gl.deleteTexture(mainImage.texture);
+        gl.deleteTexture(fbmTexture.texture);
+    }
 
     gl.canvas.width = window.innerWidth;
     gl.canvas.height = window.innerHeight;
-    previousRenderTarget = createRenderTarget();
-    renderTarget = createRenderTarget();
+    pmainImage = createRenderTarget();
+    mainImage = createRenderTarget();
+    fbmTexture = createRenderTarget();
+    
+    gl.bindFramebuffer(gl.FRAMEBUFFER, fbmTexture.framebuffer);
+    gl.viewport(0,0,gl.canvas.width,gl.canvas.height);
+    gl.disable(gl.DEPTH_TEST);
+    gl.bindVertexArray(vao);
+    gl.useProgram(fbmShader.program);
+    gl.uniform2fv(fbmShader.iResolution, glmatrix.vec2.fromValues(gl.canvas.width, gl.canvas.height));
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 }
 
 function loadFile(filePath) {
@@ -123,19 +143,18 @@ function render(now) {
     gl.disable(gl.DEPTH_TEST);
     gl.bindVertexArray(vao);
 
-    gl.bindFramebuffer(gl.FRAMEBUFFER, previousRenderTarget.framebuffer);
-    gl.useProgram(passthroughShader.program);
-    gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, renderTarget.texture);
-    gl.uniform1i(passthroughShader.iChannel0, 0);
-    gl.uniform2fv(passthroughShader.iResolution, glmatrix.vec2.fromValues(gl.canvas.width, gl.canvas.height));
-    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    const tmp = mainImage;
+    mainImage = pmainImage;
+    pmainImage = tmp;
 
-    gl.bindFramebuffer(gl.FRAMEBUFFER, renderTarget.framebuffer);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, mainImage.framebuffer);
     gl.useProgram(mainShader.program);
     gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, previousRenderTarget.texture);
+    gl.bindTexture(gl.TEXTURE_2D, pmainImage.texture);
     gl.uniform1i(mainShader.iChannel0, 0);
+    gl.activeTexture(gl.TEXTURE1);
+    gl.bindTexture(gl.TEXTURE_2D, fbmTexture.texture);
+    gl.uniform1i(mainShader.fbmTexture, 1);
     gl.uniform2fv(mainShader.iResolution, glmatrix.vec2.fromValues(gl.canvas.width, gl.canvas.height));
     gl.uniform1f(mainShader.iTime, now / 1000.0);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
@@ -143,7 +162,7 @@ function render(now) {
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     gl.useProgram(passthroughShader.program);
     gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, renderTarget.texture);
+    gl.bindTexture(gl.TEXTURE_2D, mainImage.texture);
     gl.uniform1i(passthroughShader.iChannel0, 0);
     gl.uniform2fv(passthroughShader.iResolution, glmatrix.vec2.fromValues(gl.canvas.width, gl.canvas.height));
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
@@ -163,31 +182,26 @@ function main() {
     }
 
     let program = loadProgram(passThroughVert, loadFile("shader.frag"));
-    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-        console.log("Failed to initialize shader program: " + gl.getProgramInfoLog(program));
-        return;
-    }
-
     mainShader = {
         program: program,
         iResolution: gl.getUniformLocation(program, "iResolution"),
         iTime: gl.getUniformLocation(program, "iTime"),
         iChannel0: gl.getUniformLocation(program, "iChannel0"),
+        fbmTexture: gl.getUniformLocation(program, "fbmTexture"),
     };
 
-
     program = loadProgram(passThroughVert, passThroughFrag);
-    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-        console.log("Failed to initialize shader program: " + gl.getProgramInfoLog(program));
-        return;
-    }
-    
     passthroughShader = {
         program: program,
         iResolution: gl.getUniformLocation(program, "iResolution"),
         iChannel0: gl.getUniformLocation(program, "iChannel0"),
-    }
-    
+    };
+
+    program = loadProgram(passThroughVert, loadFile("fbm.frag"));
+    fbmShader = {
+        program: program,
+        iResolution: gl.getUniformLocation(program, "iResolution"),
+    };
 
     const vbo = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
@@ -208,12 +222,10 @@ function main() {
     gl.vertexAttribPointer(0, 4, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(0);
 
-    renderTarget = createRenderTarget();
-    previousRenderTarget = createRenderTarget();
-
+    createFramebuffers();
     requestAnimationFrame(render);
 }
 
 
 window.onload = main;
-window.onresize = onResize;
+window.onresize = createFramebuffers;
