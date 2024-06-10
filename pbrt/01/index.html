@@ -78,7 +78,7 @@
     const to_element = document.getElementById('to');
 
     function lerp(a, b, t) {
-        return a*(t-1) + b*t;
+        return a*(1-t) + b*t;
     }
 
     function trapezoid(from, to, func, iter) {
@@ -135,6 +135,9 @@
             const from = from_element.valueAsNumber;
             if (to_element.value == '') to_element.valueAsNumber = from + 1;
             const to = to_element.valueAsNumber;
+
+            console.log(from);
+            console.log(to);
 
             integrate(from, to, func);
         } catch (err) {
