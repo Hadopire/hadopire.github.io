@@ -1,0 +1,159 @@
+<!doctype html>
+<html class="h-full">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./style.css" rel="stylesheet">
+</head>
+
+<body class="h-full min-w-[500px]">
+    <div id="content" class="hidden">
+        <br /><br />
+        <div class="grid  place-content-center max-w-4xl mx-auto">
+
+            <input type="text" autocomplete="off"
+                class="place-self-center w-96 block rounded-md border-0 py-1.5 px-5 text-gray-900 ring-1 ring-inset ring-gray-300"
+                id="expression" />
+            <br />
+            <div class="flex overflow-auto">
+                <div style="font-family: math; font-size: 4.5rem;">∫</div>
+
+                <div class="relative">
+                    <input type="number" id="to" class="absolute ml-2 top-1 w-6 h-4 border-0 ring-1 ring-gray-300">
+                    <input type="number" id="from" class="absolute ml-2 bottom-2 w-6 h-4 border-0 ring-1 ring-gray-300">
+                </div>
+                <span class="ml-10 my-auto overflow-auto max-h-[108px]" id="pretty">coucou</span>
+            </div>
+        </div>
+
+        <br />
+
+        <div class="text-lg mx-auto pace-content-center max-w-4xl">
+            <p class="text-red-600 text-center" id="error"></p>
+            <table class="table-auto w-full border-collapse">
+                <tbody id="table">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <div id="loader" class="flex m-auto pt-52 h-full justify-center"><span id="spinner"></span></div>
+</body>
+
+
+<script>
+
+    MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        svg: {
+            fontCache: 'global'
+        }
+    };
+</script>
+<script type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+</script>
+<script type="text/javascript" src="./math.js">
+</script>
+
+<script>
+
+    document.onreadystatechange = function () {
+        if (document.readyState === "complete") {
+            setTimeout(function () {
+                document.querySelector("#loader").style.display = "none";
+                document.querySelector("#content").style.display = "block";
+            }, 750);
+        }
+    };
+
+    const expr_element = document.getElementById('expression');
+    const pretty_element = document.getElementById('pretty');
+    const error_element = document.getElementById('error');
+    const table_element = document.getElementById('table');
+    const from_element = document.getElementById('from');
+    const to_element = document.getElementById('to');
+
+    function lerp(a, b, t) {
+        return a*(t-1) + b*t;
+    }
+
+    function trapezoid(from, to, func, iter) {
+        const step = (to - from) / iter;
+
+        const fx = [];
+        for (let i = 0; i < iter + 1; i += 1) {
+            fx.push(func.evaluate({ x: from + step * i }));
+        }
+
+        let sum = fx[0] + fx[fx.length - 1];
+        for (let i = 1; i < iter; i += 1) {
+            sum += fx[i] * 2;
+        }
+
+        sum = step * sum * 0.5;
+        return sum;
+    }
+
+    function monte_carlo(from, to, func, iter) {
+        let sum = 0;
+        for (let i = 0; i < iter; i += 1) {
+            sum += func.evaluate({ x: lerp(from, to, Math.random()) });
+        }
+
+        return (to - from) * sum / iter;
+    }
+
+    function integrate(from, to, func) {
+        const max_iter = 16384;
+        table_element.innerHTML = '<tr><th>N</th><th>Monte Carlo</th><th>Trapezoid</th></tr>';
+        
+        for (let i = 1; i <= max_iter; i *= 2) {
+            const m = monte_carlo(from, to, func, i);
+            const t = trapezoid(from, to, func, i);
+            table_element.innerHTML += '<tr><th>' + i + '</th><th>' + m.toFixed(3) + '</th><th>' + t.toFixed(3) + '</th></th>';
+        }
+    }
+
+    function evaluate() {
+        const expression = expr_element.value;
+        table_element.innerHTML = '';
+        error_element.innerHTML = '';
+        try {
+            const func = math.compile(expression);
+            const result = func.evaluate({ x: 0 });
+
+            const integral = math.parse('(' + expression + ') dx');
+            const latex = integral.toTex();
+            pretty.innerHTML = '';
+            pretty.appendChild(MathJax.tex2svg(latex));
+
+            if (from_element.value == '') from_element.valueAsNumber = 0;
+            const from = from_element.valueAsNumber;
+            if (to_element.value == '') to_element.valueAsNumber = from + 1;
+            const to = to_element.valueAsNumber;
+
+            integrate(from, to, func);
+        } catch (err) {
+            error_element.innerHTML = err.message.replaceAll('\n', '<br/>');
+            console.log(err);
+        }
+    }
+
+    const initial_expr = 'cos(x) + sin(2x) + 2cos(4x^2)';
+    expr_element.value = initial_expr;
+    from_element.valueAsNumber = 0;
+    to_element.valueAsNumber = 3;
+    evaluate(initial_expr);
+
+    expr_element.oninput = evaluate;
+    from_element.oninput = evaluate;
+    to_element.oninput = evaluate;
+
+    //# sourceURL=index.js
+</script>
+
+</html>
