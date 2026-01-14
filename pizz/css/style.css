@@ -83,7 +83,7 @@ img {
 
 .header .container {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     position: relative;
     height: 100%;
@@ -98,15 +98,15 @@ img {
 .logo img {
     height: 100%;
     width: auto;
+    max-width: calc(100vw - 500px);
+    object-fit: contain;
     image-rendering: -webkit-optimize-contrast;
     image-rendering: crisp-edges;
 }
 
 .nav.nav-desktop {
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
 }
 
 .nav.nav-mobile {
@@ -306,6 +306,22 @@ img {
     gap: 20px;
     justify-content: center;
     flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+    .hero-buttons {
+        display: grid;
+        grid-template-columns: 1fr;
+        width: 100%;
+        max-width: 320px;
+        margin: 0 auto;
+    }
+
+    .hero-buttons .btn {
+        width: 100%;
+        text-align: center;
+        box-sizing: border-box;
+    }
 }
 
 .btn {
@@ -621,13 +637,18 @@ img {
     color: var(--text-light);
 }
 
+.contact-map-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .contact-map {
     background-color: var(--anthracite-light);
-    min-height: 400px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--white);
+    height: 100%;
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
 }
 
 .contact-map iframe {
@@ -699,17 +720,8 @@ img {
    RESPONSIVE
 ======================================== */
 @media (max-width: 1100px) {
-    .header .container {
-        justify-content: center;
-        padding-left: 20px;
-        /* Décalage dynamique: plus l'écran est petit, plus on décale */
-        padding-right: calc(40px + (1100px - 100vw) * 0.7);
-    }
-
-    .nav.nav-desktop {
-        position: absolute;
-        right: 20px;
-        left: auto;
+    .nav.nav-desktop .nav-list {
+        gap: 20px;
     }
 }
 
@@ -753,7 +765,7 @@ img {
 
 @media (max-width: 768px) {
     .header {
-        height: 80px;
+        height: 90px;
     }
 
     .header .container {
@@ -766,6 +778,14 @@ img {
         max-width: calc(100% - 40px);
     }
 
+    .header .container {
+        justify-content: center;
+    }
+
+    .logo {
+        position: relative;
+    }
+
     .logo img {
         max-width: 100%;
         height: auto;
@@ -774,6 +794,8 @@ img {
 
     .menu-toggle {
         display: flex;
+        position: absolute;
+        right: 20px;
     }
 
     .nav.nav-desktop {
@@ -1175,7 +1197,6 @@ img {
 
     .engagement-content p {
         font-size: 1rem;
-        text-align: left;
     }
 
     .engagement-intro {

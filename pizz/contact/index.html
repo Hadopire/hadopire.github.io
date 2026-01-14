@@ -25,13 +25,8 @@
             <nav class="nav nav-desktop">
                 <ul class="nav-list">
                     <li><a href="../">Accueil</a></li>
-                    <li class="has-dropdown">
-                        <a href="../notre-carte/">Notre Carte</a>
-                        <ul class="dropdown">
-                            <li><a href="../notre-carte/pizzas/">Nos Pizzas</a></li>
-                            <li><a href="../notre-carte/burgers/">Nos Burgers</a></li>
-                        </ul>
-                    </li>
+                    <li><a href="../pizzas/">Nos Pizzas</a></li>
+                    <li><a href="../burgers/">Nos Burgers</a></li>
                     <li><a href="./" class="active">Contact</a></li>
                 </ul>
             </nav>
@@ -41,13 +36,8 @@
     <nav class="nav nav-mobile">
         <ul class="nav-list">
             <li><a href="../">Accueil</a></li>
-            <li class="has-dropdown">
-                <a href="../notre-carte/">Notre Carte</a>
-                <ul class="dropdown">
-                    <li><a href="../notre-carte/pizzas/">Nos Pizzas</a></li>
-                    <li><a href="../notre-carte/burgers/">Nos Burgers</a></li>
-                </ul>
-            </li>
+            <li><a href="../pizzas/">Nos Pizzas</a></li>
+            <li><a href="../burgers/">Nos Burgers</a></li>
             <li><a href="./" class="active">Contact</a></li>
         </ul>
     </nav>
@@ -120,16 +110,19 @@
                         </div>
                     </div>
 
-                    <div class="contact-map">
-                        <iframe 
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2706.5!2d-0.3082!3d47.5663!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x480878f76b0c4d93%3A0x0!2s58%20Rue%20Nationale%2C%2049140%20Seiches-sur-le-Loir!5e0!3m2!1sfr!2sfr!4v1705248000000!5m2!1sfr!2sfr"
-                            width="100%" 
-                            height="400" 
-                            style="border:0; border-radius: 12px;" 
-                            allowfullscreen="" 
-                            loading="lazy" 
-                            referrerpolicy="no-referrer-when-downgrade">
-                        </iframe>
+                    <div class="contact-map-wrapper">
+                        <a href="https://www.google.com/maps/search/?api=1&query=58+rue+Nationale+49140+Seiches-sur-le-Loir" target="_blank" rel="noopener" class="btn btn-outline" style="margin-bottom: 15px;">Itinéraire</a>
+                        <div class="contact-map">
+                            <iframe 
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2706.5!2d-0.3082!3d47.5663!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x480878f76b0c4d93%3A0x0!2s58%20Rue%20Nationale%2C%2049140%20Seiches-sur-le-Loir!5e0!3m2!1sfr!2sfr!4v1705248000000!5m2!1sfr!2sfr"
+                                width="100%" 
+                                height="400" 
+                                style="border:0; border-radius: 12px;" 
+                                allowfullscreen="" 
+                                loading="lazy" 
+                                referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -147,7 +140,8 @@
                 </div>
                 <div class="footer-links">
                     <a href="../">Accueil</a>
-                    <a href="../notre-carte/">Notre Carte</a>
+                    <a href="../pizzas/">Nos Pizzas</a>
+                    <a href="../burgers/">Nos Burgers</a>
                     <a href="./">Contact</a>
                 </div>
             </div>

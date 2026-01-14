@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Découvrez notre carte de pizzas et burgers artisanaux chez Pizz'N'Burger.">
-    <title>Notre Carte - Pizz'N'Burger</title>
+    <meta name="description" content="Découvrez toutes nos pizzas artisanales chez Pizz'N'Burger - Pâte fraîche, ingrédients de qualité.">
+    <title>Nos Pizzas - Pizz'N'Burger</title>
     <link rel="stylesheet" href="../css/style.css?v=1.1">
     <link rel="icon" type="image/png" href="../favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,13 +25,8 @@
             <nav class="nav nav-desktop">
                 <ul class="nav-list">
                     <li><a href="../">Accueil</a></li>
-                    <li class="has-dropdown">
-                        <a href="./" class="active">Notre Carte</a>
-                        <ul class="dropdown">
-                            <li><a href="pizzas/">Nos Pizzas</a></li>
-                            <li><a href="burgers/">Nos Burgers</a></li>
-                        </ul>
-                    </li>
+                    <li><a href="./" class="active">Nos Pizzas</a></li>
+                    <li><a href="../burgers/">Nos Burgers</a></li>
                     <li><a href="../contact/">Contact</a></li>
                 </ul>
             </nav>
@@ -41,13 +36,8 @@
     <nav class="nav nav-mobile">
         <ul class="nav-list">
             <li><a href="../">Accueil</a></li>
-            <li class="has-dropdown">
-                <a href="./" class="active">Notre Carte</a>
-                <ul class="dropdown">
-                    <li><a href="pizzas/">Nos Pizzas</a></li>
-                    <li><a href="burgers/">Nos Burgers</a></li>
-                </ul>
-            </li>
+            <li><a href="./" class="active">Nos Pizzas</a></li>
+            <li><a href="../burgers/">Nos Burgers</a></li>
             <li><a href="../contact/">Contact</a></li>
         </ul>
     </nav>
@@ -55,14 +45,14 @@
     <main>
         <div class="page-header">
             <div class="container">
-                <h1>Notre Carte</h1>
+                <h1 class="title-special">Nos Pizzas Maison 33cm</h1>
+                <p class="subtitle">🎁 Une boisson 33cl offerte tous les midis à emporter !</p>
             </div>
         </div>
 
         <section class="menu-section">
             <div class="container">
-                <h2 class="title-special">Nos Pizzas Maison 33cm</h2>
-                <p class="section-subtitle">🎁 Une boisson 33cl offerte tous les midis à emporter !</p>
+                <h2 id="padding-bottom-20px">Base Tomate</h2>
                 <div class="menu-grid">
                     <div class="menu-item">
                         <div class="menu-item-header">
@@ -80,10 +70,102 @@
                     </div>
                     <div class="menu-item">
                         <div class="menu-item-header">
+                            <h3>Végétarienne</h3>
+                            <span class="price">12,90 €</span>
+                        </div>
+                        <p>Sauce tomate, mozzarella, champignons, poivrons, oignons, olives</p>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-item-header">
+                            <h3>Reine</h3>
+                            <span class="price">14,90 €</span>
+                        </div>
+                        <p>Sauce tomate, mozzarella, jambon cuit, champignons, oignons, olives</p>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-item-header">
+                            <h3>Burger</h3>
+                            <span class="price">15,90 €</span>
+                        </div>
+                        <p>Sauce tomate, mozzarella, viande hachée, cheddar, sauce burger, oignons</p>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-item-header">
+                            <h3>Kebab</h3>
+                            <span class="price">15,90 €</span>
+                        </div>
+                        <p>Sauce tomate, mozzarella, viande kebab, pommes de terre, sauce blanche</p>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-item-header">
+                            <h3>Savoyarde</h3>
+                            <span class="price">15,90 €</span>
+                        </div>
+                        <p>Sauce tomate, mozzarella, pommes de terre, jambon cru, reblochon, oignons, crème fraîche</p>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-item-header">
+                            <h3>Forestière</h3>
+                            <span class="price">14,90 €</span>
+                        </div>
+                        <p>Sauce tomate, mozzarella, champignons, lardons, crème fraîche</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="menu-section">
+            <div class="container">
+                <h2 id="padding-bottom-20px">Base Crème Fraîche</h2>
+                <div class="menu-grid">
+                    <div class="menu-item">
+                        <div class="menu-item-header">
+                            <h3>Boursin</h3>
+                            <span class="price">12,90 €</span>
+                        </div>
+                        <p>Crème fraîche, mozzarella, viande hachée, boursin</p>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-item-header">
+                            <h3>Chèvre Miel</h3>
+                            <span class="price">12,90 €</span>
+                        </div>
+                        <p>Crème fraîche, mozzarella, chèvre, miel</p>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-item-header">
+                            <h3>Indienne</h3>
+                            <span class="price">15,90 €</span>
+                        </div>
+                        <p>Crème fraîche, mozzarella, filet de poulet, pommes de terre, champignons, sauce curry</p>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-item-header">
                             <h3>Raclette</h3>
                             <span class="price">16,90 €</span>
                         </div>
                         <p>Crème fraîche, mozzarella, jambon cuit, jambon cru, fromage à raclette, pommes de terre</p>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-item-header">
+                            <h3>Tartiflette</h3>
+                            <span class="price">15,90 €</span>
+                        </div>
+                        <p>Crème fraîche, mozzarella, lardons, reblochon, oignons, pommes de terre</p>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-item-header">
+                            <h3>5 Fromages Merguez</h3>
+                            <span class="price">15,90 €</span>
+                        </div>
+                        <p>Crème fraîche, mozzarella, chèvre, reblochon, bleu d'Auvergne, camembert, merguez</p>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-item-header">
+                            <h3>Cannibale</h3>
+                            <span class="price">17,90 €</span>
+                        </div>
+                        <p>Sauce barbecue, mozzarella, viande hachée, merguez, filet de poulet, oignons, pommes de terre</p>
                     </div>
                     <div class="menu-item">
                         <div class="menu-item-header">
@@ -93,58 +175,6 @@
                         <p>Choisis tes 2 pizzas préférées !</p>
                     </div>
                 </div>
-                <p class="menu-note">
-                    <a href="pizzas/" class="btn">Voir toutes nos pizzas</a>
-                </p>
-            </div>
-        </section>
-
-        <section class="menu-section">
-            <div class="container">
-                <h2 class="title-special">Nos Burgers Maison</h2>
-                <p class="section-subtitle">🍟 Servis avec des frites maison et une boisson 33cl</p>
-                <div class="menu-grid">
-                    <div class="menu-item">
-                        <div class="menu-item-header">
-                            <h3>Le Classique</h3>
-                            <span class="price">12,90 €</span>
-                        </div>
-                        <p>Steak façon bouchère FR 150g, sauce cheddar affiné, oignons confits, salade, tomate</p>
-                    </div>
-                    <div class="menu-item">
-                        <div class="menu-item-header">
-                            <h3>L'Original</h3>
-                            <span class="price">13,90 €</span>
-                        </div>
-                        <p>Steak façon bouchère FR 150g, sauce cheddar affiné, poitrine fumée, oignons confits, salade, tomate</p>
-                    </div>
-                    <div class="menu-item">
-                        <div class="menu-item-header">
-                            <h3>Burger Chèvre</h3>
-                            <span class="price">14,90 €</span>
-                        </div>
-                        <p>Steak façon bouchère FR 150g, sauce cheddar affiné, chèvre, oignons confits, salade, tomate</p>
-                    </div>
-                    <div class="menu-item">
-                        <div class="menu-item-header">
-                            <h3>Burger Raclette</h3>
-                            <span class="price">14,90 €</span>
-                        </div>
-                        <p>Steak façon bouchère FR 150g, sauce cheddar affiné, fromage à raclette, oignons confits, salade, tomate</p>
-                    </div>
-                </div>
-                <p class="menu-note">
-                    <a href="burgers/" class="btn">Voir tous nos burgers</a>
-                </p>
-            </div>
-        </section>
-
-        <section class="menu-section">
-            <div class="container">
-                <p class="menu-note">
-                    Tous nos produits sont préparés sur place avec des ingrédients frais.<br>
-                    Viande 100% française 🇫🇷
-                </p>
             </div>
         </section>
     </main>
@@ -160,7 +190,8 @@
                 </div>
                 <div class="footer-links">
                     <a href="../">Accueil</a>
-                    <a href="./">Notre Carte</a>
+                    <a href="./">Nos Pizzas</a>
+                    <a href="../burgers/">Nos Burgers</a>
                     <a href="../contact/">Contact</a>
                 </div>
             </div>
