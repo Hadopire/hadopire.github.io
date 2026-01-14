@@ -25,6 +25,7 @@
 
 html {
     scroll-behavior: smooth;
+    height: 100%;
 }
 
 body {
@@ -32,6 +33,13 @@ body {
     background-color: var(--anthracite);
     color: var(--text-dark);
     line-height: 1.6;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -223,6 +231,7 @@ img {
 .hero-content {
     color: var(--white);
     padding: 20px;
+    max-width: 900px;
 }
 
 .hero h1 {
@@ -235,6 +244,61 @@ img {
     font-size: 1.3rem;
     margin-bottom: 30px;
     font-weight: 300;
+}
+
+/* Hero étendu avec texte complet */
+.hero-extended {
+    min-height: auto;
+    padding: 120px 20px 80px;
+}
+
+.hero-text {
+    max-width: 800px;
+    margin: 0 auto 40px;
+    text-align: center;
+}
+
+.hero-text p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 20px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.hero-intro {
+    font-size: 1.3rem !important;
+    color: var(--white) !important;
+    margin-bottom: 30px !important;
+}
+
+.hero-tagline {
+    font-size: 1.2rem !important;
+    font-style: italic;
+    color: var(--accent) !important;
+    margin-top: 30px !important;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+@media (max-width: 768px) {
+    .hero-extended {
+        padding: 100px 15px 60px;
+    }
+
+    .hero-text p {
+        font-size: 1rem;
+        text-align: left;
+    }
+
+    .hero-intro {
+        text-align: center !important;
+        font-size: 1.1rem !important;
+    }
+
+    .hero-tagline {
+        text-align: center !important;
+        font-size: 1.05rem !important;
+    }
 }
 
 .hero-buttons {
@@ -595,7 +659,7 @@ img {
 }
 
 .footer-info {
-    text-align: center;
+    text-align: left;
 }
 
 .footer-info a {
@@ -607,11 +671,16 @@ img {
     color: var(--accent);
 }
 
+.footer-logo {
+    text-align: center;
+}
+
 .footer-links {
     text-align: right;
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 20px;
 }
 
 .footer-links a:hover {
@@ -659,6 +728,10 @@ img {
 
     .footer-content {
         grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .footer-info {
         text-align: center;
     }
 
@@ -813,8 +886,14 @@ img {
     }
 
     .contact-row {
-        flex-direction: column;
-        gap: 25px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .contact-row .contact-item {
+        flex: 1 1 45%;
+        min-width: 140px;
     }
 }
 
@@ -987,5 +1066,120 @@ img {
 
     .floating-btn-icon {
         font-size: 1.1rem;
+    }
+}
+
+/* ========================================
+   SECTION LOCALISATION (Accueil)
+======================================== */
+.localisation {
+    padding: 60px 0;
+    background: var(--anthracite-dark);
+}
+
+.localisation h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 40px;
+    color: var(--white);
+}
+
+.localisation-content {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 40px;
+    align-items: center;
+}
+
+.localisation-info {
+    text-align: center;
+}
+
+.localisation-info .address {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+    color: var(--text-dark);
+}
+
+.localisation-info .btn {
+    margin-top: 20px;
+}
+
+.localisation-map {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.localisation-map iframe {
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .localisation-content {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .localisation-info {
+        order: 2;
+    }
+
+    .localisation-map {
+        order: 1;
+    }
+}
+
+/* ========================================
+   SECTION ENGAGEMENT (Accueil)
+======================================== */
+.engagement {
+    padding: 30px 0;
+    background: linear-gradient(180deg, var(--anthracite) 0%, var(--anthracite-dark) 100%);
+}
+
+.engagement h2 {
+    text-align: center;
+    font-size: 2.2rem;
+    margin-bottom: 20px;
+    color: var(--white);
+}
+
+.engagement-content {
+    max-width: 800px;
+    margin: 0 auto 50px;
+    text-align: center;
+}
+
+.engagement-content p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 20px;
+    color: var(--text-dark);
+}
+
+.engagement-intro {
+    font-size: 1.25rem !important;
+    color: var(--white) !important;
+    margin-bottom: 30px !important;
+}
+
+.engagement .features-grid {
+    margin-top: 50px;
+}
+
+@media (max-width: 768px) {
+    .engagement {
+        padding: 60px 0;
+    }
+
+    .engagement-content p {
+        font-size: 1rem;
+        text-align: left;
+    }
+
+    .engagement-intro {
+        text-align: center !important;
+        font-size: 1.1rem !important;
     }
 }
