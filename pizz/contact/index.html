@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Contactez Pizz'N'Burger - Horaires, adresse et téléphone. Commandez vos pizzas et burgers.">
+    <title>Contact - Pizz'N'Burger</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Caveat:wght@400;500;600&family=Oswald:wght@400;500;600;700&family=Open+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="../" class="logo">
+                <img src="../banner.png" alt="Pizz'N'Burger">
+            </a>
+            <button class="menu-toggle" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <nav class="nav nav-desktop">
+                <ul class="nav-list">
+                    <li><a href="../">Accueil</a></li>
+                    <li class="has-dropdown">
+                        <a href="../notre-carte/">Notre Carte</a>
+                        <ul class="dropdown">
+                            <li><a href="../notre-carte/pizzas/">Nos Pizzas</a></li>
+                            <li><a href="../notre-carte/burgers/">Nos Burgers</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="./" class="active">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <nav class="nav nav-mobile">
+        <ul class="nav-list">
+            <li><a href="../">Accueil</a></li>
+            <li class="has-dropdown">
+                <a href="../notre-carte/">Notre Carte</a>
+                <ul class="dropdown">
+                    <li><a href="../notre-carte/pizzas/">Nos Pizzas</a></li>
+                    <li><a href="../notre-carte/burgers/">Nos Burgers</a></li>
+                </ul>
+            </li>
+            <li><a href="./" class="active">Contact</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <div class="page-header">
+            <div class="container">
+                <h1>Contact</h1>
+            </div>
+        </div>
+
+        <section class="contact-section">
+            <div class="container">
+                <div class="contact-grid">
+                    <div class="contact-info">
+                        <h2>Nous contacter</h2>
+                        
+                        <div class="contact-row">
+                            <div class="contact-item">
+                                <h4>📍 Adresse</h4>
+                                <p>Pizz'N'Burger</p>
+                                <p>Votre adresse ici</p>
+                                <p>Code postal - Ville</p>
+                            </div>
+
+                            <div class="contact-item">
+                                <h4>📞 Téléphone</h4>
+                                <a href="tel:0241761082">02 41 76 10 82</a>
+                            </div>
+
+                            <div class="contact-item">
+                                <h4>ℹ️ Informations</h4>
+                                <p>Sur place ou à emporter</p>
+                                <p>Paiement par carte accepté</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-item">
+                            <h4>🕐 Horaires d'ouverture</h4>
+                            <table class="horaires-table">
+                                <tr>
+                                    <td>Lundi</td>
+                                    <td>Fermé</td>
+                                </tr>
+                                <tr>
+                                    <td>Mardi</td>
+                                    <td>11h30-13h30 / 18h00-21h30</td>
+                                </tr>
+                                <tr>
+                                    <td>Mercredi</td>
+                                    <td>11h30-13h30 / 18h00-21h30</td>
+                                </tr>
+                                <tr>
+                                    <td>Jeudi</td>
+                                    <td>11h30-13h30 / 18h00-21h30</td>
+                                </tr>
+                                <tr>
+                                    <td>Vendredi</td>
+                                    <td>11h30-13h30 / 18h00-21h30</td>
+                                </tr>
+                                <tr>
+                                    <td>Samedi</td>
+                                    <td>18h00-21h30</td>
+                                </tr>
+                                <tr>
+                                    <td>Dimanche</td>
+                                    <td>18h00-21h30</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="contact-map">
+                        <!-- Remplacer par l'iframe Google Maps avec votre adresse -->
+                        <p style="text-align: center; padding: 20px;">
+                            Carte Google Maps<br>
+                            <small>(Ajouter l'iframe avec votre adresse)</small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="../banner.png" alt="Pizz'N'Burger">
+                </div>
+                <div class="footer-info">
+                    <p><a href="tel:0241761082">02 41 76 10 82</a></p>
+                </div>
+                <div class="footer-links">
+                    <a href="../">Accueil</a>
+                    <a href="../notre-carte/">Notre Carte</a>
+                    <a href="./">Contact</a>
+                </div>
+            </div>
+            <p class="copyright">&copy; 2026 Pizz'N'Burger - Tous droits réservés</p>
+        </div>
+    </footer>
+
+    <!-- Bouton flottant -->
+    <button class="floating-btn" id="floatingOrderBtn">
+        <span class="floating-btn-icon">📞</span>
+        <span class="floating-btn-text">Commander</span>
+    </button>
+
+    <!-- Modale Commande -->
+    <div class="modal-overlay" id="orderModal">
+        <div class="modal">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <div class="modal-content">
+                <div class="modal-icon">📞</div>
+                <h2>Passer commande</h2>
+                <p>Appelez-nous pour commander</p>
+                <a href="tel:0241761082" class="modal-phone">02 41 76 10 82</a>
+                <p class="modal-hours">Du mardi au dimanche</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>
